@@ -11,9 +11,3 @@ export const routes: Routes = [
     { path: 'credentials', component: CredentialListComponent },
     //{ path: 'add-credential', component: AddCredentialComponent },
 ];
-
-@NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
-})
-export class AppRoutingModule { }

@@ -1,32 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+import { RouterLink } from '@angular/router';
+import { Credential } from '../../models/credential.model';
 import { CredentialService } from '../../services/credential.service';
 
 @Component({
   selector: 'app-credential-list',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './credential-list.component.html',
-  styleUrls: ['./credential-list.component.scss']  
+  styleUrls: ['./credential-list.component.scss'] 
 })
-export class CredentialListComponent {
+export class CredentialListComponent implements OnInit {
   credentials: Credential[] = [];
 
   constructor(private credentialService: CredentialService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadCredentials();
   }
-  
-  /**get credentials to the service */
+
   loadCredentials(): void {
-    this.credentialService.getCredentials();
+    this.credentials = this.credentialService.getCredentials();
   }
 
-      /**Remove credentials by id */
   removeCredential(id: string): void {
-      if(confirm('Are you sure you want to delete this credential?')) {
-          // Call the service to remove the credential    
-        this.credentialService.removeCredential(id);
-         // Reload the credentials after deletion
-        this.loadCredentials();
-        }   
-      }
+    if (confirm('Are you sure you want to remove this credential?')) {
+      this.credentialService.removeCredential(id);
+      this.loadCredentials();
+    }
+  }
 }
