@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule, NgForOfContext } from '@angular/common'; 
 import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule, NgForm } from '@angular/forms'; 
 import { Credential } from '../../models/credential.model';
 import { CredentialService } from '../../services/credential.service';
 
@@ -20,7 +20,7 @@ export class CredentialListComponent implements OnInit {
     username: '',
     password: ''
   };
-
+  
   constructor(private credentialService: CredentialService) { }
 
 
@@ -32,9 +32,10 @@ export class CredentialListComponent implements OnInit {
     this.credentials = this.credentialService.getCredentials();
   }
 
-  addCredential(): void {
+  addCredential(form: NgForm): void {
     if (this.newCredential.service && this.newCredential.username && this.newCredential.password) {
       this.credentialService.addCredential(this.newCredential);
+      form.resetForm();
       this.newCredential = { service: '', username: '', password: '' }; // Reset form
       this.loadCredentials();
       alert('Credential added successfully!');
