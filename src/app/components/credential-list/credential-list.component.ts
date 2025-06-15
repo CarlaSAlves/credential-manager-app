@@ -1,20 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms'; 
 import { Credential } from '../../models/credential.model';
 import { CredentialService } from '../../services/credential.service';
 
 @Component({
   selector: 'app-credential-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './credential-list.component.html',
   styleUrls: ['./credential-list.component.scss'] 
 })
 export class CredentialListComponent implements OnInit {
   credentials: Credential[] = [];
 
+  newCredential: Omit<Credential, 'id'> = {
+    service: '',
+    username: '',
+    password: ''
+  };
+
   constructor(private credentialService: CredentialService) { }
+
 
   ngOnInit(): void {
     this.loadCredentials();
@@ -23,6 +31,19 @@ export class CredentialListComponent implements OnInit {
   loadCredentials(): void {
     this.credentials = this.credentialService.getCredentials();
   }
+
+  addCredential(): void {
+    if (this.newCredential.service && this.newCredential.username && this.newCredential.password) {
+      this.credentialService.addCredential(this.newCredential);
+      this.newCredential = { service: '', username: '', password: '' }; // Reset form
+      this.loadCredentials();
+      alert('Credential added successfully!');
+    } else {
+      alert('Please fill in all fields.');
+    }
+  } 
+
+
 
   removeCredential(id: string): void {
     if (confirm('Are you sure you want to remove this credential?')) {
